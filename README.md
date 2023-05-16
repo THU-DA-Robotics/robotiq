@@ -8,7 +8,7 @@ Clone the repo:
 
 ```
 cd <YOUR_PATH>/catkin_ws/src
-git clone https://github.com/THU-DA-Robotics/robotiq.git -b noetic_devel
+git clone https://github.com/THU-DA-Robotics/robotiq.git -b noetic-devel
 ```
 
 Install the dependencies:
@@ -22,7 +22,7 @@ rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 
 ----
 
-Previous README.
+# Previous README.
 
 ## Status
 
