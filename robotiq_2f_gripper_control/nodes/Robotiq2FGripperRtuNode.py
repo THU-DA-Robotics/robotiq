@@ -44,6 +44,7 @@ The script takes as an argument the IP address of the gripper. It initializes a 
 import roslib; roslib.load_manifest('robotiq_2f_gripper_control')
 roslib.load_manifest('robotiq_modbus_rtu')
 import rospy
+import time
 import robotiq_2f_gripper_control.baseRobotiq2FGripper
 import robotiq_modbus_rtu.comModbusRtu
 import os, sys
@@ -67,13 +68,20 @@ def mainLoop(device):
     #The Gripper command is received from the topic named 'Robotiq2FGripperRobotOutput'
     rospy.Subscriber('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output, gripper.refreshCommand)
 
-
     #We loop
     while not rospy.is_shutdown():
 
       #Get and publish the Gripper status
-      status = gripper.getStatus()
-      pub.publish(status)
+      try:
+        status = gripper.getStatus()
+        pub.publish(status)
+      except:
+        """
+            Mingrui Yu's comments:
+                We notice that sometimes the 'getStatus()' may temporarily fail due to unknown reasons. 
+                But it will work at the next try, so it seems not to be a big problem.
+        """
+        rospy.logwarn(f"Failed to get and publish the gripper status in current time.")
 
       #Wait a little
       #rospy.sleep(0.05)
@@ -83,6 +91,7 @@ def mainLoop(device):
 
       #Wait a little
       #rospy.sleep(0.05)
+
 
 if __name__ == '__main__':
     try:
